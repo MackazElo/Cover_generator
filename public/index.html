@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example page</title>
+    
+  </head>
+  <body>
+    <div id="cover">
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #background_square{
+                background-color: blueviolet;
+                color: red;
+                width: 500px;
+                height: 500px;
+                text-align: center;
+                font-size: 150px;
+                position: absolute;
+                z-index: 1;
+                clip-path: polygon(0% 0%, 0% 100%, 100% 00%);
+                /* clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%); */
+            }
+            
+            #foreground_square{
+                background-color: red;
+                color: blueviolet;
+                width: 500px;
+                height: 250px;
+                text-align: center;
+                font-size: 150px;
+                position: absolute;
+                padding-top: 250px;
+                z-index: 2;
+                clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+                /* clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0% 100%); */
+            }
+            #bsc, #fsc{
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+            #form_div{
+                padding-top: 600px;
+            }
+        </style>
+        <div id="background_square">
+            <div id="bsc">
+            
+            </div>
+        </div>
+        <div id="foreground_square" >
+            <div id="fsc">
+             
+            </div>
+        </div>
+    </div>
+    <div id="form_div">
+        <form action="">
+            <h3>Background</h3>
+            
+            <input type="color" placeholder="color" id="b_color" value="#8a2be2" onchange="generate_cover()"><br>
+            <textarea  placeholder="Text" id="b_text" onchange="generate_cover()"></textarea>
+            <input type="text" placeholder="font-size" id="b_size" onchange="generate_cover()">
+            <input type="text" placeholder="font-family" id="b_family" onchange="generate_cover()">
+            
+            <h3>Foreground</h3>
+            <input type="color" placeholder="color" id="f_color" value="#ff0000" onchange="generate_cover()">
+            <div id="no_sync">
+                <textarea type="text" placeholder="Text" id="f_text" onchange="generate_cover()"></textarea>
+                <input type="text" placeholder="font-size" id="f_size" onchange="generate_cover()">
+                <input type="text" placeholder="font-family" id="f_family" onchange="generate_cover()">
+            </div>
+            
+        </form>
+       <h4>Sync<input type="checkbox" id="sync" onchange="generate_cover()" checked="true"></h4>
+    </div>
+    <input type="button" value="Generuj" onclick="generate_cover()">
+    <br>
+    <h3>Plik</h3>
+    <input type="hidden" name="styles" id="styles">
+    <form id="myform" action="/submit" method="POST">
+        <input type="hidden" name="content" id="content">
+        
+      <input type="text" name="file_name" id="file_name">
+        <button type="submit">Zapisz</button>
+      </form>
+
+
+    <script>
+        generate_cover()
+        function generate_cover(){
+            let bg = document.getElementById("background_square")
+            let fr = document.getElementById("foreground_square");
+            if(document.getElementById("sync").checked == true){
+                document.getElementById("no_sync").hidden = true
+                bg.style.backgroundColor = document.getElementById("b_color").value
+                fr.style.backgroundColor = document.getElementById("f_color").value
+                bg.style.color = document.getElementById("f_color").value
+                fr.style.color = document.getElementById("b_color").value
+                bg.style.fontSize = document.getElementById("b_size").value
+                fr.style.fontSize = document.getElementById("b_size").value
+                bg.style.fontFamily = document.getElementById("b_family").value
+                fr.style.fontFamily = document.getElementById("b_family").value
+                document.getElementById("bsc").innerHTML = document.getElementById("b_text").value
+                document.getElementById("fsc").innerHTML = document.getElementById("b_text").value
+            }
+            else{
+                
+                document.getElementById("no_sync").hidden = false
+            bg.style.backgroundColor = document.getElementById("b_color").value
+            fr.style.backgroundColor = document.getElementById("f_color").value
+            bg.style.color = document.getElementById("f_color").value
+            fr.style.color = document.getElementById("b_color").value
+            bg.style.fontSize = document.getElementById("b_size").value
+            fr.style.fontSize = document.getElementById("f_size").value
+            bg.style.fontFamily = document.getElementById("b_family").value
+            fr.style.fontFamily = document.getElementById("f_family").value
+            document.getElementById("bsc").innerHTML = document.getElementById("b_text").value
+            document.getElementById("fsc").innerHTML = document.getElementById("f_text").value
+            }
+        }
+    </script>
+   
+   
+
+
+
+
+
+
+
+
+    
+    <script>
+      const form = document.getElementById('myform');
+      const contentInput = document.getElementById('content');
+      const stylesInput = document.getElementById('styles');
+      const file_nameInput = document.getElementById('file_name');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        contentInput.value = document.getElementById('cover').innerHTML;
+        stylesInput.value = serializeStyles(window.getComputedStyle(document.getElementById('cover')));
+        file_nameInput.value = document.getElementById('file_name').value;
+        form.submit();
+      });
+
+      function serializeStyles(style) {
+        let serialized = '';
+        for (let prop of style) {
+          serialized += `${prop}: ${style.getPropertyValue(prop)};`;
+        }
+        return serialized;
+      }
+    </script>
+  </body>
+</html>

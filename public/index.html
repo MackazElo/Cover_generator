@@ -4,11 +4,15 @@
     <title>Example page</title>
     
   </head>
-  <body>
-    <div id="cover">
+  <body style="display: inline-block;">
+    <div id="cover" style="float: left;">
         <style>
             body {
                 font-family: Arial, Helvetica, sans-serif;
+            }
+            td{
+              text-align: center;
+              padding: 10px;
             }
             #background_square{
                 background-color: blueviolet;
@@ -19,7 +23,7 @@
                 font-size: 150px;
                 position: absolute;
                 z-index: 1;
-                clip-path: polygon(0% 0%, 0% 100%, 100% 00%);
+                /* clip-path: polygon(0% 0%, 0% 100%, 100% 0%); */
                 /* clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%); */
             }
             
@@ -33,7 +37,7 @@
                 position: absolute;
                 padding-top: 250px;
                 z-index: 2;
-                clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+                /* clip-path: polygon(100% 0, 0% 100%, 100% 100%); */
                 /* clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0% 100%); */
             }
             #bsc, #fsc{
@@ -59,28 +63,90 @@
             </div>
         </div>
     </div>
-    <div id="form_div">
-        <form action="">
+    <!-- <div id="form_div" style="float: right; margin-top: -500px;"> -->
+    <div id="form_div" style="margin-left: 600px; margin-top: -600px;">
+      <table>
+        <tr>  
+      <form action="">
+         <td>
+            
             <h3>Background</h3>
             
             <input type="color" placeholder="color" id="b_color" value="#8a2be2" onchange="generate_cover()"><br>
-            <textarea  placeholder="Text" id="b_text" onchange="generate_cover()"></textarea>
-            <input type="text" placeholder="font-size" id="b_size" onchange="generate_cover()">
-            <input type="text" placeholder="font-family" id="b_family" onchange="generate_cover()">
-            
+            <textarea  placeholder="Text" id="b_text" onchange="generate_cover()"></textarea><br>
+            <input type="number" placeholder="font-size" id="b_size" onchange="generate_cover()"><br>
+            <input type="text" placeholder="font-family" id="b_family" onchange="generate_cover()"><br>
+            <h5>Split</h5>
+            <table>
+              <tr>
+                <th>point</th>
+                <th>X</th>
+                <th>Y</th>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td><input type="number" id="split_b_x_a" onchange="update_split()" value="0"></td>
+                <td><input type="number" id="split_b_x_b" onchange="update_split()" value="0"></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><input type="number" id="split_b_y_a" onchange="update_split()" value="0"></td>
+                <td><input type="number" id="split_b_y_b" onchange="update_split()" value="100"></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><input type="number" id="split_b_z_a" onchange="update_split()" value="100"></td>
+                <td><input type="number" id="split_b_z_b" onchange="update_split()" value="0"></td>
+              </tr>
+                
+            </table>
+           
+         </td>
+         <td>   
             <h3>Foreground</h3>
-            <input type="color" placeholder="color" id="f_color" value="#ff0000" onchange="generate_cover()">
-            <div id="no_sync">
-                <textarea type="text" placeholder="Text" id="f_text" onchange="generate_cover()"></textarea>
-                <input type="text" placeholder="font-size" id="f_size" onchange="generate_cover()">
-                <input type="text" placeholder="font-family" id="f_family" onchange="generate_cover()">
-            </div>
+            <input type="color" placeholder="color" id="f_color" value="#ff0000" onchange="generate_cover()"><br>
+           
             
+            <!-- <div id="no_sync"> -->
+                <textarea type="text" placeholder="Text" id="f_text" onchange="generate_cover()"></textarea><br>
+                <input type="number" placeholder="font-size" id="f_size" onchange="generate_cover()"><br>
+                <input type="text" placeholder="font-family" id="f_family" onchange="generate_cover()"><br>
+                <h5>Split</h5>
+                <table>
+                  <tr>
+                    <th>point</th>
+                    <th>X</th>
+                    <th>Y</th>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td><input type="number" id="split_f_x_a" onchange="update_split()" value="100"></td>
+                    <td><input type="number" id="split_f_x_b" onchange="update_split()" value="0"></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td><input type="number" id="split_f_y_a" onchange="update_split()" value="0"></td>
+                    <td><input type="number" id="split_f_y_b" onchange="update_split()" value="100"></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td><input type="number" id="split_f_z_a" onchange="update_split()" value="100"></td>
+                    <td><input type="number" id="split_f_z_b" onchange="update_split()" value="100"></td>
+                  </tr>
+                    
+                </table>
+            <!-- </div> -->
+            </td>
         </form>
+        </tr>
+        <tr>
+          <td>
        <h4>Sync<input type="checkbox" id="sync" onchange="generate_cover()" checked="true"></h4>
-    </div>
-    <input type="button" value="Generuj" onclick="generate_cover()">
+    
+    <!-- <input type="button" value="Generuj" onclick="generate_cover()"> -->
     <br>
+    </td>
+          <td>
     <h3>Plik</h3>
     <input type="hidden" name="styles" id="styles">
     <form id="myform" action="/submit" method="POST">
@@ -89,40 +155,55 @@
       <input type="text" name="file_name" id="file_name">
         <button type="submit">Zapisz</button>
       </form>
-
-
+      </td>
+        </tr>
+    </table>
+          
+    </div>
     <script>
         generate_cover()
         function generate_cover(){
             let bg = document.getElementById("background_square")
             let fr = document.getElementById("foreground_square");
             if(document.getElementById("sync").checked == true){
-                document.getElementById("no_sync").hidden = true
-                bg.style.backgroundColor = document.getElementById("b_color").value
-                fr.style.backgroundColor = document.getElementById("f_color").value
-                bg.style.color = document.getElementById("f_color").value
-                fr.style.color = document.getElementById("b_color").value
-                bg.style.fontSize = document.getElementById("b_size").value
-                fr.style.fontSize = document.getElementById("b_size").value
-                bg.style.fontFamily = document.getElementById("b_family").value
-                fr.style.fontFamily = document.getElementById("b_family").value
-                document.getElementById("bsc").innerHTML = document.getElementById("b_text").value
-                document.getElementById("fsc").innerHTML = document.getElementById("b_text").value
+                // document.getElementById("no_sync").hidden = true
+                document.getElementById("f_size").value = document.getElementById("b_size").value
+                document.getElementById("f_family").value = document.getElementById("b_family").value
+                document.getElementById("f_text").value = document.getElementById("b_text").value
             }
-            else{
-                
-                document.getElementById("no_sync").hidden = false
+                // document.getElementById("no_sync").hidden = false
             bg.style.backgroundColor = document.getElementById("b_color").value
             fr.style.backgroundColor = document.getElementById("f_color").value
             bg.style.color = document.getElementById("f_color").value
             fr.style.color = document.getElementById("b_color").value
-            bg.style.fontSize = document.getElementById("b_size").value
-            fr.style.fontSize = document.getElementById("f_size").value
+            bg.style.fontSize = document.getElementById("b_size").value+"px"
+            fr.style.fontSize = document.getElementById("f_size").value+"px"
             bg.style.fontFamily = document.getElementById("b_family").value
             fr.style.fontFamily = document.getElementById("f_family").value
             document.getElementById("bsc").innerHTML = document.getElementById("b_text").value
             document.getElementById("fsc").innerHTML = document.getElementById("f_text").value
-            }
+            
+        }
+        update_split()
+        function update_split(){
+          var split_b_x_a = document.getElementById("split_b_x_a").value
+          var split_b_x_b = document.getElementById("split_b_x_b").value
+          var split_b_y_a = document.getElementById("split_b_y_a").value
+          var split_b_y_b = document.getElementById("split_b_y_b").value
+          var split_b_z_a = document.getElementById("split_b_z_a").value
+          var split_b_z_b = document.getElementById("split_b_z_b").value
+          var split_f_x_a = document.getElementById("split_f_x_a").value
+          var split_f_x_b = document.getElementById("split_f_x_b").value
+          var split_f_y_a = document.getElementById("split_f_y_a").value
+          var split_f_y_b = document.getElementById("split_f_y_b").value
+          var split_f_z_a = document.getElementById("split_f_z_a").value
+          var split_f_z_b = document.getElementById("split_f_z_b").value
+
+          document.getElementById("background_square").style = `clip-path : polygon(${split_b_x_a}% ${split_b_x_b}%, ${split_b_y_a}% ${split_b_y_b}%, ${split_b_z_a}% ${split_b_z_b}%);`
+          document.getElementById("foreground_square").style = `clip-path : polygon(${split_f_x_a}% ${split_f_x_b}%, ${split_f_y_a}% ${split_f_y_b}%, ${split_f_z_a}% ${split_f_z_b}%);`
+ 
+          // document.getElementById("background_square").style.clipPath = polygon(`${split_b_x_a}% ${split_b_x_b}%, ${split_b_y_a}% ${split_b_y_b}%, ${split_b_z_a}% ${split_b_z_b}%`);
+          // document.getElementById("foreground_square").style.clipPath = polygon(`${split_f_x_a}% ${split_f_x_b}%, ${split_f_y_a}% ${split_f_y_b}%, ${split_f_z_a}% ${split_f_z_b}%`);
         }
     </script>
    
